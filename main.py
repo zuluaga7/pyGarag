@@ -1,4 +1,4 @@
-from AdminAutomoviles import AdminAutomoviles
+from adminAutomoviles import AdminAutomoviles
 
 
 def agregar_automovil_menu(admin):
@@ -11,6 +11,7 @@ def agregar_automovil_menu(admin):
         opc = input("\nSelecciona una opción: ")
 
         if opc == '1':
+
             continue
         elif opc == '2':
             break
