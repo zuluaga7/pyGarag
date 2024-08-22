@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin-right: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Garaje la z</h1>
+
+        <!-- Automóviles -->
+        <h2 style=" background-color: lightblue; margin: 37px; width: 201px; height: 40px; text-align: center; line-height: 40px;">Automóviles</h2>
+        <button onclick="verInventario('automoviles')">Ver Inventario</button>
+        <button onclick="ocultarInventario('automoviles')">Ocultar Inventario</button>
+        <button onclick="eliminarTodo('automoviles')">Eliminar Todo</button>
+
+        <form id="form-automovil">
+            <h3>Agregar/Actualizar Automóvil</h3>
+            <input type="text" id="matricula-automovil" placeholder="Matrícula" required>
+            <input type="text" id="marca-automovil" placeholder="Marca" required>
+            <input type="text" id="categoria-automovil" placeholder="Categoría" required>
+            <input type="number" id="año-automovil" placeholder="Año" required>
+            <button type="button" onclick="crearActualizarAutomovil()">Agregar/Actualizar</button>
+        </form>
+
+        <table id="tabla-automoviles" class="hidden">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Matrícula</th>
+                    <th>Marca</th>
+                    <th>Categoría</th>
+                    <th>Año</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <!-- Motos -->
+        <h2 style=" background-color: lightblue; margin: 37px; width: 201px; height: 40px; text-align: center; line-height: 40px;">Motos</h2>
+        <button onclick="verInventario('motos')">Ver Inventario</button>
+        <button onclick="ocultarInventario('motos')">Ocultar Inventario</button>
+        <button onclick="eliminarTodo('motos')">Eliminar Todo</button>
+
+        <form id="form-moto">
+            <h3>Agregar/Actualizar Moto</h3>
+            <input type="text" id="matricula-moto" placeholder="Matrícula" required>
+            <input type="text" id="marca-moto" placeholder="Marca" required>
+            <input type="text" id="modelo-moto" placeholder="Modelo" required>
+            <input type="number" id="año-moto" placeholder="Año" required>
+            <input type="number" id="cilindraje-moto" placeholder="Cilindraje" required>
+            <button type="button" onclick="crearActualizarMoto()">Agregar/Actualizar</button>
+        </form>
+
+        <table id="tabla-motos" class="hidden">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Matrícula</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Año</th>
+                    <th>Cilindraje</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <!-- Barcos -->
+        <h2 style=" background-color: lightblue; margin: 37px; width: 201px; height: 40px; text-align: center; line-height: 40px;">Barcos</h2>
+        <button onclick="verInventario('barcos')">Ver Inventario</button>
+        <button onclick="ocultarInventario('barcos')">Ocultar Inventario</button>
+        <button onclick="eliminarTodo('barcos')">Eliminar Todo</button>
+
+        <form id="form-barco">
+            <h3>Agregar/Actualizar Barco</h3>
+            <input type="text" id="matricula-barco" placeholder="Matrícula" required>
+            <input type="text" id="marca-barco" placeholder="Marca" required>
+            <input type="text" id="modelo-barco" placeholder="Modelo" required>
+            <input type="number" id="año-barco" placeholder="Año" required>
+            <input type="number" id="capacidad-barco" placeholder="Capacidad" required>
+            <button type="button" onclick="crearActualizarBarco()">Agregar/Actualizar</button>
+        </form>
+
+        <table id="tabla-barcos" class="hidden">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Matrícula</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Año</th>
+                    <th>Capacidad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Función para obtener inventario
+        async function verInventario(tipo) {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/${tipo}/`);
+                if (!response.ok) throw new Error('Error al obtener datos');
+                const datos = await response.json();
+                const tabla = document.getElementById(`tabla-${tipo}`);
+                const tbody = tabla.querySelector('tbody');
+                tbody.innerHTML = ''; // Limpiar tabla antes de agregar nuevos datos
+
+                datos.forEach(item => {
+                    const fila = document.createElement('tr');
+                    for (const key in item) {
+                        if (item.hasOwnProperty(key)) {
+                            const celda = document.createElement('td');
+                            celda.textContent = item[key];
+                            fila.appendChild(celda);
+                        }
+                    }
+                    const celdaAcciones = document.createElement('td');
+                    const botonEliminar = document.createElement('button');
+                    botonEliminar.textContent = 'Eliminar';
+                    botonEliminar.onclick = () => eliminar(tipo, item.matricula || item.id);
+                    celdaAcciones.appendChild(botonEliminar);
+                    fila.appendChild(celdaAcciones);
+                    tbody.appendChild(fila);
+                });
+
+                tabla.classList.remove('hidden');
+            } catch (error) {
+                console.error(error);
+                alert('Error al obtener datos');
+            }
+        }
+
+        // Función para ocultar el inventario
+        function ocultarInventario(tipo) {
+            const tabla = document.getElementById(`tabla-${tipo}`);
+            tabla.classList.add('hidden');
+        }
+
+        // Función para eliminar todo el inventario
+        async function eliminarTodo(tipo) {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/${tipo}/`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Error al eliminar inventario');
+                alert(`Todo el inventario de ${tipo} ha sido eliminado`);
+                ocultarInventario(tipo);
+            } catch (error) {
+                console.error(error);
+                alert('Error al eliminar inventario');
+            }
+        }
+
+        // Función para agregar o actualizar un automóvil
+        async function crearActualizarAutomovil() {
+            const matricula = document.getElementById('matricula-automovil').value;
+            const marca = document.getElementById('marca-automovil').value;
+            const categoria = document.getElementById('categoria-automovil').value;
+            const año = parseInt(document.getElementById('año-automovil').value);
+
+            if (isNaN(año)) {
+                alert('El año debe ser un número entero.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/automoviles/${matricula}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ matricula, marca, categoria, año })
+                });
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        // Si no existe, creamos uno nuevo
+                        await fetch('http://127.0.0.1:8000/automoviles', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ matricula, marca, categoria, año })
+                        });
+                    } else {
+                        throw new Error('Error al crear/actualizar automóvil');
+                    }
+                }
+                alert('Automóvil creado/actualizado exitosamente');
+                verInventario('automoviles');
+            } catch (error) {
+                console.error(error);
+                alert('Error al crear/actualizar automóvil');
+            }
+        }
+
+        // Función para agregar o actualizar una moto
+        async function crearActualizarMoto() {
+            const matricula = document.getElementById('matricula-moto').value;
+            const marca = document.getElementById('marca-moto').value;
+            const modelo = document.getElementById('modelo-moto').value;
+            const año = parseInt(document.getElementById('año-moto').value);
+            const cilindraje = parseInt(document.getElementById('cilindraje-moto').value);
+
+            if (isNaN(año) || isNaN(cilindraje)) {
+                alert('El año y el cilindraje deben ser números enteros.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/motos/${matricula}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ matricula, marca, modelo, año, cilindraje })
+                });
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        // Si no existe, creamos uno nuevo
+                        await fetch('http://127.0.0.1:8000/motos', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ matricula, marca, modelo, año, cilindraje })
+                        });
+                    } else {
+                        throw new Error('Error al crear/actualizar moto');
+                    }
+                }
+                alert('Moto creada/actualizada exitosamente');
+                verInventario('motos');
+            } catch (error) {
+                console.error(error);
+                alert('Error al crear/actualizar moto');
+            }
+        }
+
+    async function crearActualizarBarco() {
+        const matricula = document.getElementById('matricula-barco').value;
+        const marca = document.getElementById('marca-barco').value;
+        const modelo = document.getElementById('modelo-barco').value;
+        const año = parseInt(document.getElementById('año-barco').value);
+        const capacidad = parseInt(document.getElementById('capacidad-barco').value);
+
+    if (isNaN(año) || isNaN(capacidad)) {
+        alert('El año y la capacidad deben ser números enteros.');
+        return;
+    }
+
+    try {
+        console.log('Enviando datos:', { matricula, marca, modelo, año, capacidad });
+
+        const response = await fetch(`http://127.0.0.1:8000/barcos/${matricula}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ matricula, marca, modelo, año, capacidad })
+        });
+
+        if (!response.ok) {
+            console.log('Respuesta del servidor:', await response.text()); // Log de la respuesta del servidor
+            if (response.status === 404) {
+                // Si no existe, creamos uno nuevo
+                const createResponse = await fetch('http://127.0.0.1:8000/barcos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ matricula, marca, modelo, año, capacidad })
+                });
+                if (!createResponse.ok) throw new Error('Error al crear barco');
+            } else {
+                throw new Error('Error al actualizar barco');
+            }
+        }
+
+        alert('Barco creado/actualizado exitosamente');
+        verInventario('barcos');
+    } catch (error) {
+        console.error(error);
+        alert('Error al crear/actualizar barco');
+    }
+}
+
+
+        // Función para eliminar un vehículo
+        async function eliminar(tipo, id) {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/${tipo}/${id}`, {
+                    method: 'DELETE'
+                });
+                if (!response.ok) throw new Error('Error al eliminar vehículo');
+                alert('Vehículo eliminado exitosamente');
+                verInventario(tipo);
+            } catch (error) {
+                console.error(error);
+                alert('Error al eliminar vehículo');
+            }
+        }
+    </script>
+</body>
+</html>

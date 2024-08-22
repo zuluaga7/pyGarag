@@ -1,4 +1,4 @@
-from adminAutomoviles import AdminAutomoviles
+"""from adminAutomoviles import AdminAutomoviles
 
 
 def agregar_automovil_menu(admin):
@@ -114,4 +114,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main()"""

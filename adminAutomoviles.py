@@ -1,6 +1,22 @@
-from sqlalchemy.orm import Session
+"""from sqlalchemy.orm import Session
 from modelos import Automovil  # El modelo SQLAlchemy que definimos antes
 from base_de_datos import SessionLocal  # Sesión de la base de datos
+
+
+def eliminar_automovil():
+    db = SessionLocal()
+
+    matricula = input("Ingrese la matrícula del automóvil que desea eliminar: ")
+    automovil = db.query(Automovil).filter(Automovil.matricula == matricula).first()
+
+    if automovil:
+        db.delete(automovil)
+        db.commit()
+        print("Automóvil eliminado exitosamente.")
+    else:
+        print("Automóvil no encontrado.")
+
+    db.close()
 
 
 class AdminAutomoviles:
@@ -62,20 +78,5 @@ class AdminAutomoviles:
         else:
             print("Automóvil no encontrado.")
 
-        db.close()
-
-    def eliminar_automovil(self):
-        db = SessionLocal()
-
-        matricula = input("Ingrese la matrícula del automóvil que desea eliminar: ")
-        automovil = db.query(Automovil).filter(Automovil.matricula == matricula).first()
-
-        if automovil:
-            db.delete(automovil)
-            db.commit()
-            print("Automóvil eliminado exitosamente.")
-        else:
-            print("Automóvil no encontrado.")
-
-        db.close()
+        db.close()"""
 

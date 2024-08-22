@@ -13,11 +13,25 @@ class Automovil(Base):
     categoria = Column(String(100))
     año = Column(Integer)
 
-class Usuarios(Base):
-    __tablename__ = "usuarios"
+
+class Moto(Base):
+    __tablename__ = "motos"
 
     id = Column(Integer, primary_key=True, index=True)
-    matricula = Column(String(50), unique=True, index=True)
+    matricula = Column(String(50), unique=True, index=True, nullable=False)
+    marca = Column(String(50), nullable=False)
+    modelo = Column(String(50), nullable=False)
+    año = Column(Integer, nullable=False)
+    cilindraje = Column(Integer, nullable=False)
+
+
+class Barco(Base):
+    __tablename__ = 'barcos'
+
+    id = Column(Integer, primary_key=True, index=True)
+    matricula = Column(String(100), unique=True, index=True)
     marca = Column(String(100))
-    categoria = Column(String(100))
+    modelo = Column(String(100))
     año = Column(Integer)
+    capacidad = Column(Integer)
+

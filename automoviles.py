@@ -1,4 +1,4 @@
-from tokenize import String
+"""from tokenize import String
 from sqlalchemy import column, Integer, string, Column
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -17,5 +17,5 @@ class Automoviles(Base):
 
 # Creas instancias directamente y accedes a los atributos
 nuevo_auto = Automoviles(matricula="ABC123", marca="Toyota", categoria="SUV", año=2022)
-print(nuevo_auto.marca)  # Accede directamente al atributo
+print(nuevo_auto.marca)  # Accede directamente al atributo"""
 
